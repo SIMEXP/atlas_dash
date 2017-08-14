@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<style>
+
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  stroke: steelblue;
+  stroke-opacity: 0.5;
+  fill: none;
+  pointer-events: none;
+}
+
+</style>
+<body>
+
+  <svg id="edge_bundling" width="900" height="900"></svg> 
+
+</body>
+<script src="d3.v4.min.js"></script>
+<script src="edge_bundling.js"></script>
+<script>
+var bundling;
+ var svg = d3.select('#edge_bundling');
+     d3.json('test_3.json', function(error, data) {
+        if (!error) {
+          bundling = Object.create(edgeBundling);
+          bundling.init(svg, data, 0);
+          bundling.svg = svg;
+        }else {
+          console.error(error);
+        }
+      });
+
+</script>
