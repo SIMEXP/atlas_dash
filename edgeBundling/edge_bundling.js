@@ -13,6 +13,14 @@ var edgeBundling = {
 			indexNodes = 0,
 			angle = (2*3.1416)/nbNodes;
 
+		var cluster = d3.cluster()
+    		.size([360, innerRadius]);
+
+	
+		var lineGenerator = d3.line()
+		    .curve(d3.curveBundle.beta(0.7))
+		    .x(function(d){return d[0];})
+		    .y(function(d){return d[1];});
 
 
 		var diameter = Math.min(width, height),
@@ -54,24 +62,7 @@ var edgeBundling = {
 	    });
 
 
- /* link = link
-    .data(data.links)
-    .enter().append("path")
-      .attr("class", "link")
-      .attr("d", line);*/
-
-
-		var link = svg.append("g")
-      		.attr("class", "links")
-      		.selectAll("line")
-      		.data(data.links)
-      		.enter().append("line")
-        	.attr("stroke", "black")
-          	.attr("opacity", function(d){
-            	return d.value;
-          	})
-      		.attr("stroke-width", 1.5);
-      		//.attr("d", line);
+	
 
       	var node = svg.append("g")
       		.attr("class", "nodes")
@@ -112,44 +103,67 @@ var edgeBundling = {
               onClickAll(d);
             })*/;
 
+            tick();
 
+            var link = svg.append("g")
+		    	.attr("class", "links")
+		    	.selectAll("path")
+		    	.data(data.links)
+		    	.enter().append("path")
+		    	.each(function(d){
+		    		d.coordinates = [
+		    		[d.source.x, d.source.y], 
+		    		[width/2, height/2],
+		    		[d.target.x, d.target.y]
+		    		];
+		    	})
+		   		.attr("class", "link")
+		   		.attr("d", function(d){
+		   			return lineGenerator(d.coordinates);
+		   		});
 
 
            function tick() {
-           		node
-          			.attr("cx", function(d){ return PositionNodeX(d);})
-          			.attr("cy", function(d){ return PositionNodeY(d);})
-
-	      		link
+	      	/*	link
 	          		.attr("x1", function(d) { //console.log(d);
 	          			return d.source.x; })
 	          		.attr("y1", function(d) { return d.source.y; })
 	          		.attr("x2", function(d) { return d.target.x; })
-	          		.attr("y2", function(d) { return d.target.y; });
+	          		.attr("y2", function(d) { return d.target.y; });*/
 
-      			
+      			node
+          			.attr("cx", function(d){ d.x = PositionNodeX(d); return d.x;})
+          			.attr("cy", function(d){ d.y = PositionNodeY(d); return d.y;})
 
 		        /*label
 		            .attr("x", function(d) { return d.x+5;})
 		            .attr("y", function(d) { return d.y-5;});*/
 
 		    }
-		    tick();
+			
 
             function PositionNodeX(d){
-            	//console.log(radius+" "+angle+" "+indexNodes);
-            	indexNodes = indexNodes + 1;
-            	var x =	width/2 + innerRadius*Math.sin(angle*indexNodes);
-            	d.x = x;
+              	indexNodes = indexNodes + 1;
+            	var x =	Math.round(width/2 + innerRadius*Math.sin(angle*indexNodes));
 				return x;
 			};
 
 			function PositionNodeY(d){
 				indexNodes = indexNodes + 1;
-				var y =	height/2 + innerRadius*Math.cos(angle*indexNodes);
-				d.y = y;
+				var y =	Math.round(height/2 + innerRadius*Math.cos(angle*indexNodes));
 				return y;
 			};
+
+			function pointArray(d){
+				var dist = 1;
+
+
+				d.coordinates = [
+		    		[d.source.x, d.source.y], 
+		    		[width/2, height/2],
+		    		[d.target.x, d.target.y]
+		    		];
+			}
 
 
 			
