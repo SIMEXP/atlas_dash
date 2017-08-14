@@ -76,7 +76,7 @@
     var link = svg.append("g").selectAll(".link"),
         node = svg.append("g").selectAll(".node");
 
-    d3.json("data.json", function(error, classes) {
+    d3.json("edge_test.json", function(error, classes) {
         if (error) throw error;
 
         var root = packageHierarchy(classes)
