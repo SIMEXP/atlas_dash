@@ -52,22 +52,29 @@
 
 </style>
 <body>
+    <h4>tension
+      <input type="range" min="0" max="1" step="0.1" value="0.8" onchange="rangeChange(value);">
+    </h4>
+   
+</body>
 <script src="d3.v4.min.js"></script>
 <script>
 
     var diameter = 960,
         radius = diameter / 2,
-        innerRadius = radius - 120;
+        innerRadius = radius - 120,
+        tension = 0.8;
 
     var cluster = d3.cluster()
         .size([360, innerRadius]);
 
     var line = d3.radialLine()
-        .curve(d3.curveBundle.beta(0.85))
+        .curve(d3.curveBundle.beta(tension))
         .radius(function(d) { return d.y; })
         .angle(function(d) { return d.x / 180 * Math.PI; });
 
     var svg = d3.select("body").append("svg")
+        .attr("id", "edge_1")
         .attr("width", diameter)
         .attr("height", diameter)
         .append("g")
@@ -170,6 +177,21 @@
         });
 
         return imports;
+    }
+
+    function rangeChange(v){
+        tension = v;
+        console.log(tension);
+
+        line = d3.radialLine()
+            .curve(d3.curveBundle.beta(tension))
+            .radius(function(d) { return d.y; })
+            .angle(function(d) { return d.x / 180 * Math.PI; });
+
+
+        d3.select("#edge_1")
+            .selectAll("path")
+            .attr("d", line);
     }
 
 </script>
