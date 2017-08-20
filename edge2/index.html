@@ -6,33 +6,33 @@
 </head>
 <style>
 
-    .node {
+    .label {
         font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
         fill: #bbb;
     }
 
-    .node:hover {
+    .label:hover {
         fill: #000;
     }
 
     .link {
-        stroke: steelblue;
+        stroke: #454545;
         stroke-opacity: 0.4;
         fill: none;
         pointer-events: none;
     }
 
-    .node:hover,
-    .node--source,
-    .node--target {
+    .label:hover,
+    .label--source,
+    .label--target {
         font-weight: 700;
     }
 
-    .node--source {
+    .label--source {
         fill: #2ca02c;
     }
 
-    .node--target {
+    .label--target {
         fill: #d62728;
     }
 
@@ -47,7 +47,7 @@
     }
 
     .link--target {
-        stroke: #2ca02c;
+        stroke: blue;
     }
 
 </style>
@@ -65,6 +65,9 @@
         innerRadius = radius - 120,
         tension = 0.8;
 
+    var colors = ["#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", 
+                    "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
+
     var cluster = d3.cluster()
         .size([360, innerRadius]);
 
@@ -81,7 +84,7 @@
         .attr("transform", "translate(" + radius + "," + radius + ")");
 
     var link = svg.append("g").selectAll(".link"),
-        node = svg.append("g").selectAll(".node");
+        label = svg.append("g").selectAll(".label");
 
     d3.json("edge_test.json", function(error, classes) {
         if (error) throw error;
@@ -91,6 +94,8 @@
 
         cluster(root);
 
+        console.log(packageImports(root.leaves()));
+
         link = link
             .data(packageImports(root.leaves()))
             .enter().append("path")
@@ -98,20 +103,39 @@
             .attr("class", "link")
             .attr("d", line);
 
-        node = node
+        console.log(root.leaves());
+
+        label = label
             .data(root.leaves())
             .enter().append("text")
-            .attr("class", "node")
+            .attr("class", "label")
             .attr("dy", "0.31em")
-            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
+            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y+8 + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
             .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
             .text(function(d) { return d.data.key; })
             .on("mouseover", mouseovered)
             .on("mouseout", mouseouted);
+
+        var node = svg.append("g").selectAll("circle")
+            .attr("class", "node")
+            .data(root.leaves())
+            .enter().append("circle")
+            .attr("id", function(d){
+                return d.id;//add +"_"+index to match other elements
+            })
+            .attr("fill", function(d){
+                var name = getGroupFromName(d.data.name);
+                return colors[name];
+            })
+            .attr("r", 3)
+            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); });
+
+
+
     });
 
     function mouseovered(d) {
-        node
+        label
             .each(function(n) { n.target = n.source = false; });
 
         link
@@ -120,9 +144,9 @@
             .filter(function(l) { return l.target === d || l.source === d; })
             .raise();
 
-        node
-            .classed("node--target", function(n) { return n.target; })
-            .classed("node--source", function(n) { return n.source; });
+        label
+            .classed("label--target", function(n) { return n.target; })
+            .classed("label--source", function(n) { return n.source; });
     }
 
     function mouseouted(d) {
@@ -130,9 +154,9 @@
             .classed("link--target", false)
             .classed("link--source", false);
 
-        node
-            .classed("node--target", false)
-            .classed("node--source", false);
+        label
+            .classed("label--target", false)
+            .classed("label--source", false);
     }
 
     // Lazily construct the package hierarchy from class names.
@@ -181,7 +205,6 @@
 
     function rangeChange(v){
         tension = v;
-        console.log(tension);
 
         line = d3.radialLine()
             .curve(d3.curveBundle.beta(tension))
@@ -192,6 +215,14 @@
         d3.select("#edge_1")
             .selectAll("path")
             .attr("d", line);
+    }
+
+    function getGroupFromName(s){
+        var name = s.charAt(7) + "";
+        if(s.charAt(8) != "."){
+            name += s.charAt(8);
+        }
+        return name;
     }
 
 </script>
