@@ -110,7 +110,7 @@
             .enter().append("text")
             .attr("class", "label")
             .attr("dy", "0.31em")
-            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y+8 + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
+            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
             .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
             .text(function(d) { return d.data.key; })
             .on("mouseover", mouseovered)
@@ -121,15 +121,25 @@
             .data(root.leaves())
             .enter().append("circle")
             .attr("id", function(d){
-                return d.id;//add +"_"+index to match other elements
+                return d.id;//add +"_"+index to match other elements uniqueness
             })
             .attr("fill", function(d){
-                var name = getGroupFromName(d.data.name);
-                return colors[name];
+                var group = getGroupFromName(d.data.name);
+                return colors[group];
             })
             .attr("r", 3)
-            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); });
+            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); });
 
+        var groupLabel = svg.append("g").selectAll(".groupLabel")
+            .attr("class", "groupLabel")
+            .data(packageParent(root.leaves()))
+            .enter().append("text")
+            .attr("dy", "0.5em")
+            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 40) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
+            .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+            .text(function(d) { return d.name; })
+
+         console.log(packageParent(root.leaves()));
 
 
     });
@@ -145,7 +155,7 @@
             .raise();
 
         label
-            .classed("label--target", function(n) { return n.target; })
+            .classed("label--target", function(n) { console.log(n);return n.target; })
             .classed("label--source", function(n) { return n.source; });
     }
 
@@ -223,6 +233,30 @@
             name += s.charAt(8);
         }
         return name;
+    }
+
+    function packageParent(nodes){
+        var parents = [];
+        var first = nodes[0];
+        for(var i=0; i<nodes.length; i++){
+            if(first.parent.data.key != nodes[i].parent.data.key){
+                var obj = {};
+                obj.name = first.parent.data.key;
+                obj.x = (first.x +nodes[i-1].x)/2;
+                obj.y = 360;
+                parents.push(obj);
+                first = nodes[i];
+            }
+        }
+        var obj = {};
+                obj.name = first.parent.data.key;
+                obj.x = (first.x +nodes[nodes.length-1].x)/2;
+                obj.y = 360;
+                parents.push(obj);
+
+
+        return parents;
+
     }
 
 </script>
