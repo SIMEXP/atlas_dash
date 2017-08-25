@@ -53,17 +53,17 @@
 </style>
 <body>
     <h4>tension
-      <input type="range" min="0" max="1" step="0.1" value="0.8" onchange="rangeChange(value);">
+      <input type="range" min="0" max="1" step="0.1" value="0.8" onchange="edge.rangeChange(value);">
     </h4>
    
 </body>
 <script src="edgeBundling.js"></script>
 <script src="d3.v4.min.js"></script>
 <script>
-    
+    var edge;
      d3.json('edge_test.json', function(error, classes) {
         if (!error) {
-              var edge = Object.create(edgeBundling);
+              edge = Object.create(edgeBundling);
 
               var svg = d3.select("body").append("svg")
                 .attr("id", "edge_1")

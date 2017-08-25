@@ -5,12 +5,12 @@ var edgeBundling = {
 	label: "",
 	node: "",
 	groupLabel: "",
+	tension: 0.8,
 	init: function(svg, classes, index){
 		this.svg = svg;
 
 	    var radius = this.diameter / 2,
-	        innerRadius = radius - 120,
-	        tension = 0.8;
+	        innerRadius = radius - 120;
 
 	    var colors = ["#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", 
 	                    "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
@@ -19,7 +19,7 @@ var edgeBundling = {
 	        .size([360, innerRadius]);
 
 	    var line = d3.radialLine()
-	        .curve(d3.curveBundle.beta(tension))
+	        .curve(d3.curveBundle.beta(this.tension))
 	        .radius(function(d) { return d.y; })
 	        .angle(function(d) { return d.x / 180 * Math.PI; });
 
@@ -154,10 +154,10 @@ var edgeBundling = {
     },
 
     rangeChange: function(v){
-        tension = v;
+        this.tension = v;
 
         line = d3.radialLine()
-            .curve(d3.curveBundle.beta(tension))
+            .curve(d3.curveBundle.beta(this.tension))
             .radius(function(d) { return d.y; })
             .angle(function(d) { return d.x / 180 * Math.PI; });
 
