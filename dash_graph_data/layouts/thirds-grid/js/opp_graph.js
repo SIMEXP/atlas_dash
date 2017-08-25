@@ -1,52 +1,71 @@
-      var nodeIsSelected = "";
-      var svg = [3];
-      var graphs = [3];
-      var brain = null;
-      var brainIsSelected = false;
+var nodeIsSelected = "";
+var svg = [3];
+var graphs = [3];
+var brain = null;
+var brainIsSelected = false;
 
-   $(window).load(function(){
-        brain = brainsprite({
-          canvas: "viewer",
-          sprite: "spriteImg",
-          nbSlice: { 'Y':233 , 'Z':189 },
-          colorBackground: "#FFFFFF",
-          colorFont: "#000000",
-          flagCoordinates: true,
-          voxelSize: 1.000,
-          onclick: function(e){
-            console.log(brain);
-            var nodeIndex = this.numSlice.X%24;
+$(window).load(function(){
+  brain = brainsprite({
+    canvas: "viewer",
+    sprite: "spriteImg",
+    nbSlice: { 'Y':233 , 'Z':189 },
+    colorBackground: "#FFFFFF",
+    colorFont: "#000000",
+    flagCoordinates: true,
+    voxelSize: 1.000,
+    onclick: function(e){
+      console.log(brain);
+      var nodeIndex = this.numSlice.X%24;
 
-            d3.select("#graph_1").selectAll("circle")
-              .attr("inutile", function(d,i){
-                if(i == nodeIndex){
-                  mouseOverAll(d);
-                  brainIsSelected = true;
-                  onClickAll(d);
-                  brainIsSelected = false;
-                }
-                return null;
-              });
-          },
-          overlay: {
-            sprite: "rmapAverage",
-            nbSlice: {'Y':233 , 'Z':189 },
-            smooth: true,
-            opacity: 0.6
-          },
-          colorMap: {
-            img: "colorMap",
-            min: 1,
-            max: 7,
+      d3.select("#graph_1").selectAll("circle")
+        .attr("inutile", function(d,i){
+          if(i == nodeIndex){
+            mouseOverAll(d);
+            brainIsSelected = true;
+            onClickAll(d);
+            brainIsSelected = false;
           }
+          return null;
         });
+    },
+    overlay: {
+      sprite: "rmapAverage",
+      nbSlice: {'Y':233 , 'Z':189 },
+      smooth: true,
+      opacity: 0.6
+    },
+    colorMap: {
+      img: "colorMap",
+      min: 1,
+      max: 7,
+    }
+  });
+});
+
+var edge;
+
+d3.json('edge_test.json', function(error, classes) {
+  if (!error) {
+    edge = Object.create(edgeBundling);
+
+    var svg = d3.select("#edge").append("svg")
+      .attr("id", "edge_1")
+      .attr("width", edge.diameter)
+      .attr("height", edge.diameter)
+      .append("g")
+      .attr("transform", "translate(" + edge.diameter/2 + "," + edge.diameter/2 + ")");
+
+      edge.init(svg, classes, 0);
+      edge.svg = svg;
+  }else {
+    console.error(error);
+  }
+});
 
 
 
-      });
-
-
-     var svg1 = d3.select('#graph_1');
+//GRAPH PART EXAMPLE TO INTEGRATE EDGE BUNDLING *****************************************************************************************************
+  /*   var svg1 = d3.select('#graph_1');
      d3.json('test_3.json', function(error, graph) {
         if (!error) {
           graphs[0] = Object.create(Graph);
@@ -113,5 +132,5 @@
         }
 
       nodeIsSelected = "";
-    }
+    }*/
 
