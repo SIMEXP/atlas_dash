@@ -1,6 +1,6 @@
 var edgeBundling = {
 	svg: "",
-	diameter: 960,
+	diameter: 700,
 	link:"",
 	label: "",
 	node: "",
@@ -10,7 +10,7 @@ var edgeBundling = {
 		this.svg = svg;
 
 	    var radius = this.diameter / 2,
-	        innerRadius = radius - 120;
+	        innerRadius = radius-90;
 
 	    var colors = ["#FF0000", "#800000", "#FFFF00", "#808000", "#00FF00", "#008000", 
 	                    "#00FFFF", "#008080", "#0000FF", "#000080", "#FF00FF", "#800080"];
@@ -75,7 +75,7 @@ var edgeBundling = {
             .data(this.packageParent(root.leaves()))
             .enter().append("text")
             .attr("dy", "0.5em")
-            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 40) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
+            .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + (d.y-50) + ",0)" + (d.x < 180 ? "" : "rotate(180)"); })
             .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
             .text(function(d) { return d.name; })
 

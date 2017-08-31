@@ -40,6 +40,42 @@ $(window).load(function(){
       max: 7,
     }
   });
+
+   brain2 = brainsprite({
+    canvas: "viewer2",
+    sprite: "spriteImg2",
+    nbSlice: { 'Y':233 , 'Z':189 },
+    colorBackground: "#FFFFFF",
+    colorFont: "#000000",
+    flagCoordinates: true,
+    voxelSize: 1.000,
+    onclick: function(e){
+      console.log(brain);
+      var nodeIndex = this.numSlice.X%24;
+
+      d3.select("#graph_1").selectAll("circle")
+        .attr("inutile", function(d,i){
+          if(i == nodeIndex){
+            mouseOverAll(d);
+            brainIsSelected = true;
+            onClickAll(d);
+            brainIsSelected = false;
+          }
+          return null;
+        });
+    },
+    overlay: {
+      sprite: "rmapAverage2",
+      nbSlice: {'Y':233 , 'Z':189 },
+      smooth: true,
+      opacity: 0.6
+    },
+    colorMap: {
+      img: "colorMap",
+      min: 1,
+      max: 7,
+    }
+  });
 });
 
 var edge;

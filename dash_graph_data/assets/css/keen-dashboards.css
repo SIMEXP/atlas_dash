@@ -84,7 +84,6 @@ body.application .return-link:hover,
 }
 
 .chart-wrapper .chart-stage {
-  min-height: 450px;
   width: 100%;
   overflow: hidden;
   padding: 5px 10px;

@@ -45,6 +45,14 @@
         stroke: blue;
     }
 
+    body, html, .container-fluid {
+     height: 100%;
+    }
+
+    .tension {
+      width: 25%;
+    }
+
 </style>
 
 <html>
@@ -56,13 +64,9 @@
   <!-- Demo Dependencies -->
 
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/holder/2.3.2/holder.min.js" type="text/javascript"></script>
-  <script>
-    Holder.add_theme("white", { background:"#fff", foreground:"#a7a7a7", size:10 });
-  </script>
 
   <!-- Dashboard -->
-  <link rel="stylesheet" type="text/css" href="../../assets/css/keen-dashboards.css" />
+   <link rel="stylesheet" type="text/css" href="../../assets/css/keen-dashboards.css" />
 </head>
 <body class="application">
 
@@ -90,19 +94,18 @@
 
   <div class="container-fluid">
     <div class="row">
-
-      <div class="col-sm-6">
+    <div class="col-sm-12">
+      <div class="col-sm-7">
         <div class="chart-wrapper">
           <div class="chart-title">
-            Pageviews by browser (past 24 hours)
+            <div class="tension">
+             <p>tension</p>
+                <input type="range" min="0" max="1" step="0.1" value="0.8" onchange="edge.rangeChange(value);">
+             
+             </div>
           </div>
-          <div class="chart-stage">
+          <div class="chart-stage" id="edge">
             
-            <canvas id="viewer">
-              <img id="spriteImg" class="hidden" src="img/template.jpg">
-              <img id="rmapAverage" class="hidden" src="img/basc_cambridge_sc7.png">
-              <img id="colorMap" class="hidden" src="img/basc_cambridge_sc7_cm.png">
-
 
           </div>
           <div class="chart-notes">
@@ -111,56 +114,59 @@
         </div>
       </div>
 
-      <div class="col-sm-6">
-        <div class="chart-wrapper">
+      <div class="col-sm-5">
+              <div class="row">
+                <aside class="col-sm-12">
+                  
+                  <div class="chart-wrapper">
           <div class="chart-title">
-            Pageviews by browser (past 5 days)
-          </div>
-          <div class="chart-stage" id="edge">
-           
-
-
-
-          </div>
-          <div class="chart-notes">
-            Notes go down here
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-
-    <div class="row">
-
-      <div class="col-sm-12">
-        <div class="chart-wrapper">
-          <div class="chart-title">
-            Impressions by advertiser
+            Pageviews by browser (past 24 hours)
           </div>
           <div class="chart-stage">
-            
-            <svg id="graph_1" width="1500" height="1500"></svg>
 
-            
+            <canvas id="viewer">
+              <img id="spriteImg" class="hidden" src="img/template.jpg">
+              <img id="rmapAverage" class="hidden" src="img/basc_cambridge_sc7.png">
+              <img id="colorMap" class="hidden" src="img/basc_cambridge_sc7_cm.png">
+
           </div>
           <div class="chart-notes">
-            Notes go down here
+            This is a sample text region to describe this chart.
           </div>
         </div>
-      </div>
 
-    </div>
+                </aside>
+                <aside class="col-sm-12">
+                  
+                  <div class="chart-wrapper">
+          <div class="chart-title">
+            Pageviews by browser (past 24 hours)
+          </div>
+          <div class="chart-stage">
 
+
+             <canvas id="viewer2">
+              <img id="spriteImg2" class="hidden" src="img/template.jpg">
+              <img id="rmapAverage2" class="hidden" src="img/basc_cambridge_sc7.png">
+              <img id="colorMap2" class="hidden" src="img/basc_cambridge_sc7_cm.png">
+
+          </div>
+          <div class="chart-notes">
+            This is a sample text region to describe this chart.
+          </div>
+        </div>
+
+                </aside>
+              </div>
+        </div>
+        </div>
     <hr>
 
     <p class="small text-muted">Built with &#9829; by <a href="https://keen.io">Keen IO</a></p>
 
   </div>
 
-  <script type="text/javascript" src="../../assets/lib/keen-js/dist/keen.min.js"></script>
-  <script type="text/javascript" src="../../assets/js/meta.js"></script>
-  <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+   <script type="text/javascript" src="../../assets/d3.v4.js"></script>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   <script src="../../assets/lib/select2/select2.min.js"></script> <!--from select 2-->
 
